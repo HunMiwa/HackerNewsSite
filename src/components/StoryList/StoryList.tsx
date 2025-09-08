@@ -1,18 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { StoryCard } from './StoryCard';
-import ButtonSample from '../ui/ButtonSample';
+import { StoryCard } from '../StoryCard/StoryCard';
+import ButtonSample from '../ButtonSample/ButtonSample';
 import classes from './StoryList.module.css';
 
-/**
- * StoryList component with lazy loading functionality
- * @param {Array} stories - Array of story objects
- * @param {boolean} loading - Loading state
- * @param {string} error - Error message
- * @param {boolean} hasMore - Whether there are more stories to load
- * @param {function} onLoadMore - Callback to load more stories
- * @param {function} onRefresh - Callback to refresh stories
- * @param {function} onLoginClick - Callback to handle login click
- */
 export const StoryList = ({ 
   stories, 
   loading, 
@@ -25,7 +15,6 @@ export const StoryList = ({
   const observerRef = useRef<any>(null);
   const loadMoreRef = useRef<any>(null);
 
-  // Set up intersection observer for lazy loading
   const lastStoryElementRef = useCallback((node) => {
     if (loading) return;
     if (observerRef.current && typeof observerRef.current.disconnect === 'function') {
@@ -44,7 +33,6 @@ export const StoryList = ({
     if (node) observerRef.current.observe(node);
   }, [loading, hasMore, onLoadMore]);
 
-  // Cleanup observer on unmount
   useEffect(() => {
     return () => {
       if (observerRef.current && typeof observerRef.current.disconnect === 'function') {
@@ -53,11 +41,10 @@ export const StoryList = ({
     };
   }, []);
 
-  // Error state
   if (error && stories.length === 0) {
     return (
-      <div className={classes.storyListError} >
-        <div className={classes.errorContent}>
+      <div className={classes.storyListError}>
+        <div className={classes.errorContent} id = "error_message">
           <h3>😕 Oops! Something went wrong</h3>
           <p>{error}</p>
           <ButtonSample onClick={onRefresh}>
@@ -68,10 +55,9 @@ export const StoryList = ({
     );
   }
 
-  // Empty state
   if (!loading && stories.length === 0) {
     return (
-      <div className={classes.storyListEmpty}>
+      <div className={classes.storyListEmpty} id = "empty_error_message">
         <h3>📭 No stories found</h3>
         <p>Try refreshing the page or check back later.</p>
         <ButtonSample onClick={onRefresh}>
@@ -83,17 +69,14 @@ export const StoryList = ({
 
   return (
     <div className={classes.storyList}>
-      {/* Refresh button */}
       <div className={classes.storyListHeader}>
-        <ButtonSample onClick={onRefresh} disabled={loading} className={classes.refreshButton}>
+        <ButtonSample onClick={onRefresh} disabled={loading} className={classes.refreshButton} id = "refresh_btn">
           🔄 Refresh
         </ButtonSample>
       </div>
 
-      {/* Stories */}
-      <div className={classes.storiesContainer}>
+      <div className={classes.storiesContainer} id = "stories_container">
         {stories.map((story, index) => {
-          // Attach ref to the last few elements for lazy loading
           const isLastElement = index === stories.length - 1;
           
           return (
@@ -108,17 +91,15 @@ export const StoryList = ({
         })}
       </div>
 
-      {/* Loading indicator */}
       {loading && (
         <div className={classes.loadingIndicator}>
-          <div className={classes.loadingSpinner}></div>
+          <div className={classes.loadingSpinner} id = "loading_spinner"></div>
           <p>Loading stories...</p>
         </div>
       )}
 
-      {/* Load more button (fallback) */}
       {!loading && hasMore && (
-        <div className={classes.loadMoreContainer}>
+        <div className={classes.loadMoreContainer} id = "load_more_btn">
           <ButtonSample 
             ref={loadMoreRef}
             onClick={onLoadMore}
@@ -128,16 +109,14 @@ export const StoryList = ({
         </div>
       )}
 
-      {/* End indicator */}
       {!loading && !hasMore && stories.length > 0 && (
-        <div className={classes.endIndicator}>
-          <p>🎉 You've reached the end!</p>
+        <div className={classes.endIndicator} id = "end_indicator">
+          <p>You've reached the end!</p>
         </div>
       )}
 
-      {/* Error during loading more */}
       {error && stories.length > 0 && (
-        <div className={classes.loadError}>
+        <div className={classes.loadError} id = "load_error_message">
           <p>Failed to load more stories: {error}</p>
           <ButtonSample onClick={onLoadMore}>
             Try Again

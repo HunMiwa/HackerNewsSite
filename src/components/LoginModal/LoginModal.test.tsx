@@ -1,18 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import LoginPage from '../LoginPage';
+import LoginModal from './LoginModal';
 
-describe('LoginPage', () => {
+describe('LoginModal', () => {
   const mockOnLogin = vi.fn();
   const mockOnClose = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    // no timers
   });
 
   const defaultProps = {
@@ -23,12 +19,12 @@ describe('LoginPage', () => {
   };
 
   it('does not render when isOpen is false', () => {
-    const { container } = render(<LoginPage {...defaultProps} isOpen={false} />);
+    const { container } = render(<LoginModal {...defaultProps} isOpen={false} />);
     expect(container.firstChild).toBeNull();
   });
 
   it('renders login form with correct elements', () => {
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     expect(screen.getByText('Welcome Back')).toBeInTheDocument();
     expect(screen.getByLabelText('Username')).toBeInTheDocument();
@@ -38,7 +34,7 @@ describe('LoginPage', () => {
   });
 
   it('renders register form when modaltype is register', () => {
-    render(<LoginPage {...defaultProps} modaltype="register" />);
+    render(<LoginModal {...defaultProps} modaltype="register" />);
     
     expect(screen.getByText('Join Hacker News')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Create Account' })).toBeInTheDocument();
@@ -48,14 +44,14 @@ describe('LoginPage', () => {
 
   it('displays custom message when provided', () => {
     const customMessage = 'Please log in to continue';
-    render(<LoginPage {...defaultProps} customMessage={customMessage as any} />);
+    render(<LoginModal {...defaultProps} customMessage={customMessage as any} />);
     
     expect(screen.getByText(customMessage)).toBeInTheDocument();
   });
 
   it('validates form fields correctly', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
     await user.click(submitButton);
@@ -66,7 +62,7 @@ describe('LoginPage', () => {
 
   it('validates username length', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username');
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
@@ -79,7 +75,7 @@ describe('LoginPage', () => {
 
   it('validates password length', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const passwordInput = screen.getByLabelText('Password');
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
@@ -92,23 +88,21 @@ describe('LoginPage', () => {
 
   it('clears errors when user starts typing', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username');
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
     
-    // Trigger validation error
     await user.click(submitButton);
     expect(screen.getByText('Username is required')).toBeInTheDocument();
     
-    // Start typing to clear error
     await user.type(usernameInput, 'test');
     expect(screen.queryByText('Username is required')).not.toBeInTheDocument();
   });
 
   it('submits form with valid data', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username');
     const passwordInput = screen.getByLabelText('Password');
@@ -128,7 +122,7 @@ describe('LoginPage', () => {
 
   it('toggles between login and register modes', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     expect(screen.getByText('Welcome Back')).toBeInTheDocument();
     
@@ -141,7 +135,7 @@ describe('LoginPage', () => {
 
   it('closes modal when overlay is clicked', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const overlay = document.querySelector('[class*="loginOverlay"]') as HTMLElement;
     await user.click(overlay);
@@ -151,7 +145,7 @@ describe('LoginPage', () => {
 
   it('closes modal when close button is clicked', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const closeButton = screen.getByRole('button', { name: 'Close login modal' });
     await user.click(closeButton);
@@ -161,7 +155,7 @@ describe('LoginPage', () => {
 
   it('does not close when clicking inside modal', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const modal = document.querySelector('.loginModal') as HTMLElement;
     await user.click(modal);
@@ -170,9 +164,9 @@ describe('LoginPage', () => {
   });
 
   it('resets form when modal opens', () => {
-    const { rerender } = render(<LoginPage {...defaultProps} isOpen={false} />);
+    const { rerender } = render(<LoginModal {...defaultProps} isOpen={false} />);
     
-    rerender(<LoginPage {...defaultProps} isOpen={true} modaltype="login" />);
+    rerender(<LoginModal {...defaultProps} isOpen={true} modaltype="login" />);
     
     const usernameInput = screen.getByLabelText('Username') as HTMLInputElement;
     const passwordInput = screen.getByLabelText('Password') as HTMLInputElement;
@@ -183,7 +177,7 @@ describe('LoginPage', () => {
 
   it('disables form inputs when loading', async () => {
     const user = userEvent.setup();
-    render(<LoginPage {...defaultProps} />);
+    render(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username') as HTMLInputElement;
     const passwordInput = screen.getByLabelText('Password') as HTMLInputElement;

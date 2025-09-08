@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import ButtonSample from '../ui/ButtonSample';
-import classes from './LoginPage.module.css';
+import ButtonSample from '../ButtonSample/ButtonSample';
+import classes from './LoginModal.module.css';
 
-const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, modaltype }) => {
+const LoginModal = ({ onLogin, onClose, isOpen = false, customMessage = null, modaltype }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -100,7 +100,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
   return (
     <div className={classes.loginOverlay} onClick={handleOverlayClick}>
       <div className={classes.loginModal} id = {`${isRegistering}_modal`}>
-        {/* Close button */}
         <button 
           className={classes.closeBtn}
           id = "close_btn"
@@ -110,7 +109,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
           ✕
         </button>
 
-        {/* Header */}
         <div className={classes.loginHeader}>
           <div className={classes.logoSection}>
             <span className={classes.logo} id = "modal_logo">📰</span>
@@ -126,7 +124,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
           </p>
         </div>
 
-        {/* Form */}
         <form className={classes.loginForm} onSubmit={handleSubmit} id = {`${isRegistering}_form`}>
           {errors.general && (
             <div className={classes.errorMessage}>
@@ -134,7 +131,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
             </div>
           )}
 
-          {/* Username field */}
           <div className={classes.formGroup}>
             <label htmlFor="username" className={classes.label} id = "username_label">
               Username
@@ -156,7 +152,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
             )}
           </div>
 
-          {/* Password field */}
           <div className={classes.formGroup}>
             <label htmlFor="password" className={classes.label} id = "password_label">
               Password
@@ -178,7 +173,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
             )}
           </div>
 
-          {/* Submit button */}
           <ButtonSample
             type="submit"
             disabled={isLoading}
@@ -197,7 +191,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
           </ButtonSample>
         </form>
 
-        {/* Footer */}
         <div className={classes.loginFooter}>
           <p className={classes.toggleText}>
             {isRegistering === "register" ? 'Already have an account?' : "Don't have an account?"}
@@ -225,7 +218,6 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
           )}
         </div>
 
-        {/* Features list for registration */}
         {isRegistering === "register" && (
           <div className={classes.featuresList} id = "features_list">
             <h3 className={classes.featuresTitle} id = "features_title" >Why join Hacker News?</h3>
@@ -242,4 +234,4 @@ const LoginPage = ({ onLogin, onClose, isOpen = false, customMessage = null, mod
   );
 };
 
-export default LoginPage;
+export default LoginModal;

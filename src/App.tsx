@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useStories } from './hooks/useStories';
-import Navbar from './components/Navbar';
-import { StoryList } from './components/StoryList';
-import LoginPage from './components/LoginPage';
+import Navbar from './components/Navbar/Navbar';
+import { StoryList } from './components/StoryList/StoryList';
+import LoginModal from './components/LoginModal/LoginModal';
 import classes from './App.module.css';
 
 function App() {
@@ -75,7 +75,7 @@ function App() {
         />
       </main>
 
-      <LoginPage
+      <LoginModal
         modaltype="login"
         isOpen={isLoginOpen}
         onLogin={handleLogin}

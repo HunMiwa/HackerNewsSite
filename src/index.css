@@ -43,7 +43,6 @@ a:hover {
   color: #ff6600;
 }
 
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -54,13 +53,11 @@ a:hover {
   }
 }
 
-/* Focus styles for keyboard navigation */
 *:focus-visible {
   outline: 2px solid #ff6600;
   outline-offset: 2px;
 }
 
-/* Hide focus outline for mouse users */
 *:focus:not(:focus-visible) {
   outline: none;
 }

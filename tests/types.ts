@@ -2,7 +2,7 @@ import type { ParameterType } from "./support/parameterType"
 
 const buttonType = { 
   name: 'button_type', 
-  options: ['login', 'register', 'submit', 'close', 'toggle'] as const 
+  options: ['login', 'register', 'submit', 'close', 'toggle', 'refresh'] as const 
 }
 export type ButtonType = (typeof buttonType.options)[number]
 

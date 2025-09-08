@@ -1,5 +1,5 @@
 import classes from './StoryCard.module.css';
-import ButtonSample from '../ui/ButtonSample';
+import ButtonSample from '../ButtonSample/ButtonSample';
 
 export const StoryCard = ({ story, onLoginClick }) => {
 

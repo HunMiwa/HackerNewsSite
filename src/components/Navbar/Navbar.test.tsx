@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Navbar from '../Navbar';
+import Navbar from '../Navbar/Navbar';
 
 describe('Navbar', () => {
   const mockOnNavigate = vi.fn();
@@ -76,12 +76,10 @@ describe('Navbar', () => {
   it('sets active state on navigation items', async () => {
     const user = userEvent.setup();
     render(<Navbar {...defaultProps} />);
-    
-    // Top should be active by default
+  
     const topButton = screen.getByRole('button', { name: 'top' });
     expect(topButton.className).toContain('navItemActive');
     
-    // Click new item and verify it becomes active
     const newButton = screen.getByRole('button', { name: 'new' });
     await user.click(newButton);
     
@@ -150,7 +148,6 @@ describe('Navbar', () => {
     
     const topButton = screen.getByRole('button', { name: 'top' });
     
-    // Should not throw error when clicking without onNavigate
     expect(() => user.click(topButton)).not.toThrow();
   });
 });

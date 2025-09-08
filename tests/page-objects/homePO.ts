@@ -1,4 +1,4 @@
 export default {
-    page_title: 'Hacker News',
+    error_message: '#error_message',
 }
 

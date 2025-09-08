@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import ButtonSample from '../ui/ButtonSample';
+import ButtonSample from '../ButtonSample/ButtonSample';
 import classes from './Navbar.module.css';
 
 const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, username }) => {
   const [activeItem, setActiveItem] = useState('top');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
     { id: 'top', label: 'top', title: 'Top Stories' },
@@ -26,6 +27,16 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
     } else {
       onLoginClick();
     }
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleMobileNavClick = (item) => {
+    handleNavClick(item);
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -61,6 +72,17 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
           </ButtonSample>
         </div>
 
+        <button 
+          className={classes.hamburgerButton}
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+          id="hamburger_menu_btn"
+        >
+          <span className={`${classes.hamburgerLine} ${isMobileMenuOpen ? classes.hamburgerLineOpen : ''}`}></span>
+          <span className={`${classes.hamburgerLine} ${isMobileMenuOpen ? classes.hamburgerLineOpen : ''}`}></span>
+          <span className={`${classes.hamburgerLine} ${isMobileMenuOpen ? classes.hamburgerLineOpen : ''}`}></span>
+        </button>
+
         <div className={classes.userSection}>
           {isLoggedIn ? (
             <div className={classes.userInfo}>
@@ -85,6 +107,35 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
           )}
         </div>
       </div>
+
+      {isMobileMenuOpen && (
+        <div className={classes.mobileMenuOverlay}>
+          <div className={classes.mobileMenu}>
+            {navItems.map((item) => (
+              <ButtonSample
+                id = {`mobile_nav_button_${item.id}`}
+                key={item.id}
+                className={`${classes.mobileNavItem} ${
+                  activeItem === item.id ? classes.mobileNavItemActive : ''
+                }`}
+                onClick={() => handleMobileNavClick(item)}
+                title={item.title}
+              >
+                {item.label}
+              </ButtonSample>
+            ))}
+            
+            <ButtonSample
+              id = "mobile_nav_button_submit"
+              className={`${classes.mobileNavItem} ${classes.mobileNavItemSpecial}`}
+              onClick={handleSubmitClick}
+              title={isLoggedIn ? 'Submit a Story' : 'Login to Submit'}
+            >
+              submit
+            </ButtonSample>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

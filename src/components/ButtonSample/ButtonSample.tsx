@@ -13,7 +13,7 @@ const ButtonSample = ({
       className={`${classes.button} ${className}`}
       onClick={onClick}
       disabled={disabled}
-      type={type}
+      type={type as 'submit' | 'button' | 'reset'}
       {...props}
     >
       {children}
