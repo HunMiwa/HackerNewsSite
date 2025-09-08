@@ -11,14 +11,15 @@
     "test": "vitest",
     "bdd": "cucumber-js --config cucumber.mjs",
     "bdd:dev": "HEADLESS=false npm run bdd",
-    "refresh-vscode": "tsx tests/support/refreshCustomParameters.ts",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "refresh-types": "tsx tests/support/refreshCustomParameters.ts",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "axios": "^1.11.0",
+    "prettier": "^3.6.2",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "shelljs": "^0.10.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.3.0",

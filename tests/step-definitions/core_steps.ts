@@ -6,7 +6,7 @@ Given('I open Hacker News', async function () {
   await core.openHackerNews.call(this as any)
 })
 
-Then('I click on the {string} button', async function (buttonType: ButtonType) {
+Then('I click on the {button_type} button', async function (buttonType: ButtonType) {
   await core.clickButton.call(this as any, buttonType)
 })
 

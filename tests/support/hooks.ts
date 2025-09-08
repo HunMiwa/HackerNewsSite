@@ -1,13 +1,7 @@
-import { After, Before, BeforeAll, AfterAll, defineParameterType } from '@cucumber/cucumber'
+import { After, Before, BeforeAll, AfterAll } from '@cucumber/cucumber'
 import { chromium } from '@playwright/test'
 import { spawn, exec } from 'child_process'
 import { promisify } from 'util'
-import { commonTypes } from '../types.js'
-
-// Register custom parameter types
-commonTypes.forEach(parameterType => {
-  defineParameterType(parameterType)
-})
 
 const execPromise = promisify(exec)
 let devServerProcess: any = null

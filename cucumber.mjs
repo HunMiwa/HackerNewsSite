@@ -3,8 +3,11 @@ export default {
     paths: ['tests/features/**/*.feature'],
     // Step definitions location - include TypeScript files
     import: [
-        'tests/step-definitions/*.ts',
-        'tests/support/*.ts'
+        'tests/support/hooks.ts',
+        'tests/support/world.ts',
+        'tests/support/config.ts',
+        'tests/support/refreshCustomParameters.ts',
+        'tests/step-definitions/*.ts'
     ],
     // TypeScript support
     loader: ['ts-node/esm'],

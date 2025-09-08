@@ -7,7 +7,7 @@
    - No need for routing.
 
 # Improvements/left to do:
-   - Fix the problem with the types - some cucumber related pain.
+   ✅ Fix the problem with the types - some cucumber related pain.
    - Introduce CodeceptJS for even better BDD experience.
    - Indocude Docker and Moon.
    - Introduce tests with playwright and APIs, intercepting the APIcalls, etc. 
@@ -18,6 +18,8 @@
    - Reporting to some fancy site - preferebly DataDog
    - The use of custom paramteres are not consistent because of the problem said at the first point.
    - Introduce context?
+
+# If you were to ask what was my hardest challenge? CUCUMBER AUTOCOMPLETE
 
 ### How to use:
 

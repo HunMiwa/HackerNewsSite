@@ -1,22 +1,13 @@
 import { CustomWorld } from '../support/world.js'
+import { ModalType } from '../types.js'
 import { AssertNotVisible, AssertVisible } from './core.js'
 
-export async function CheckLoginModal(this: CustomWorld) {
-  const loginModal = await this.page.locator('#login_modal')
+export async function CheckModalVisible(this: CustomWorld, modalType: ModalType) {
+  const loginModal = await this.page.locator(`#${modalType}_modal`)
   await AssertVisible(loginModal)
 }
 
-export async function CheckRegisterModal(this: CustomWorld) {
-  const registerModal = await this.page.locator('#register_modal')
-  await AssertVisible(registerModal)
-}
-
-export async function CheckLoginModalNotVisible(this: CustomWorld) {
-  const loginModal = await this.page.locator('#login_modal')
+export async function CheckModalNotVisible(this: CustomWorld,  modalType: ModalType ) {
+  const loginModal = await this.page.locator(`#${modalType}_modal`)
   await AssertNotVisible(loginModal)
-}
-
-export async function CheckRegisterModalNotVisible(this: CustomWorld) {
-  const registerModal = await this.page.locator('#register_modal')
-  await AssertNotVisible(registerModal)
-}   
+} 

@@ -1,63 +1,62 @@
 import fs from 'fs'
-import path from 'path'
-import { exec } from 'child_process'
-import { promisify } from 'util'
-import { commonTypes } from '../types.js'
+import shelljs from 'shelljs'
+import { defineParameterType } from '@cucumber/cucumber'
+import types from '../types.js'
 
-const execAsync = promisify(exec)
+function getOptionsRegex(options: readonly string[]): string {
+  return `(${options.map((o: string) => o.replace('{string}', "'.*'")).join('|')})`
+}
 
-export async function refreshCustomParameters(): Promise<void> {
-  const projectRoot = path.resolve(process.cwd())
-  const vscodeDir = path.join(projectRoot, '.vscode')
-  const settingsJson = path.join(vscodeDir, 'settings.json')
+function getListRegex(options: readonly string[]): string {
+  const optionsRegex = getOptionsRegex(options)
+  return `(${optionsRegex}(?:,${optionsRegex})*)`
+}
+
+export function registerCustomParameters(): void {
+  const settingsJson = '.vscode/settings.json'
+  const json = fs.readFileSync(settingsJson, 'utf8')
+  const settings = JSON.parse(json)
   
-  // Create .vscode directory if it doesn't exist
-  if (!fs.existsSync(vscodeDir)) {
-    fs.mkdirSync(vscodeDir, { recursive: true })
-  }
-  
-  // Read existing settings or create empty object
-  let settings: any = {}
-  if (fs.existsSync(settingsJson)) {
-    try {
-      const json = fs.readFileSync(settingsJson, 'utf8')
-      settings = JSON.parse(json)
-    } catch (error) {
-      console.log('Error reading settings.json, creating new one:', error)
-      settings = {}
+  // Generate cucumber.parameterTypes format
+  const parameterTypes: { name: string; regexp: string }[] = []
+  for (const type of [...types]) {
+    parameterTypes.push({ 
+      name: type.name, 
+      regexp: type.options[0] === '.*' ? '.*' : `(${type.options.join('|')})` 
+    })
+    if (type.canBeList) {
+      parameterTypes.push({
+        name: `${type.name}_list`,
+        regexp: getListRegex(type.options)
+      })
     }
   }
   
-  // Build custom parameters for VS Code Cucumber autocomplete
-  const params: { parameter: string; value: string }[] = []
-  
-  for (const type of commonTypes) {
-    const optionsRegex = type.regexp.source.replace(/^\(\?\:/, '(').replace(/\)$/, ')')
-    params.push({ 
-      parameter: `{${type.name}}`, 
-      value: optionsRegex
-    })
-  }
-  
-  // Update settings
-  settings['cucumberautocomplete.customParameters'] = params
-  settings['cucumberautocomplete.steps'] = [
-    'tests/step-definitions/**/*.ts'
-  ]
-  settings['cucumberautocomplete.syncfeatures'] = 'tests/features/**/*.feature'
-  
-  // Write updated settings
+  settings['cucumber.parameterTypes'] = parameterTypes
   fs.writeFileSync(settingsJson, JSON.stringify(settings, null, 2))
-  
-  // Format with prettier if available
-  try {
-    await execAsync(`npx prettier --write --log-level error "${settingsJson}"`)
-    console.log('✅ Custom parameters refreshed and formatted')
-  } catch (error) {
-    console.log('⚠️  Custom parameters refreshed (prettier formatting failed)')
+  shelljs.exec(`npx prettier -w --log-level error ${settingsJson}`)
+}
+
+function defineCucumberParameterTypes(): void {
+  for (const type of [...types]) {
+    defineParameterType({
+      name: type.name,
+      regexp: new RegExp(`(${type.options.join('|')})`),
+      transformer: (s: string) => s,
+    })
+    
+    if (type.canBeList) {
+      defineParameterType({
+        name: `${type.name}_list`,
+        regexp: new RegExp(getListRegex(type.options)),
+        transformer: (s: string) => s.split(',').map(item => item.trim()),
+      })
+    }
   }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  refreshCustomParameters().catch(console.error)
+  registerCustomParameters()
+} else {
+  defineCucumberParameterTypes()
 }

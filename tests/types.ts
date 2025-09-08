@@ -1,32 +1,20 @@
-// Button Type definition
+import type { ParameterType } from "./support/parameterType"
+
 const buttonType = { 
   name: 'button_type', 
-  options: ['login', 'register', 'submit', 'close'] as const 
+  options: ['login', 'register', 'submit', 'close', 'toggle'] as const 
 }
 export type ButtonType = (typeof buttonType.options)[number]
 
-// Modal Type definition
 const modalType = {
-  name: 'ModalType',
+  name: 'modal_type',
   options: ['login', 'register'] as const
 }
 export type ModalType = (typeof modalType.options)[number]
 
-// Parameter type configurations for Cucumber
-export const buttonTypeParameter = {
-  name: buttonType.name,
-  regexp: new RegExp(`(?:${buttonType.options.join('|')})`),
-  transformer: (value: string) => value as ButtonType
-}
-
-export const modalTypeParameter = {
-  name: modalType.name,
-  regexp: new RegExp(`(?:${modalType.options.join('|')})`),
-  transformer: (value: string) => value as ModalType
-}
-
-// Export all common types
-export const commonTypes = [
-  buttonTypeParameter, 
-  modalTypeParameter
+const types: ParameterType[] = [
+  buttonType,
+  modalType,
 ]
+
+export default types
