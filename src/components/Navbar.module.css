@@ -1,0 +1,236 @@
+.navbar {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.navLogo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  font-size: 24px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+.navTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.navItems {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.navItem {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.navItem:hover {
+  background: #f7fafc;
+  color: #2d3748;
+}
+
+.navItemActive {
+  background: #ff6600;
+  color: white;
+}
+
+.navItemActive:hover {
+  background: #e55a00;
+  color: white;
+}
+
+.navItemSpecial {
+  border: 1px solid #ff6600;
+  color: #ff6600;
+  margin-left: 8px;
+}
+
+.navItemSpecial:hover {
+  background: #ff6600;
+  color: white;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.logoutBtn {
+  background: transparent;
+  border: 1px solid #cbd5e0;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #4a5568;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.logoutBtn:hover {
+  background: #f7fafc;
+  border-color: #a0aec0;
+}
+
+.loginBtn {
+  font-size: 14px;
+  padding: 8px 16px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navContainer {
+    padding: 12px 16px;
+    gap: 16px;
+  }
+
+  .navTitle {
+    font-size: 18px;
+  }
+
+  .logoIcon {
+    font-size: 20px;
+  }
+
+  .navItems {
+    gap: 2px;
+  }
+
+  .navItem {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .navItemSpecial {
+    margin-left: 4px;
+  }
+
+  .loginBtn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 640px) {
+  .navContainer {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .navLogo {
+    order: 1;
+  }
+
+  .userSection {
+    order: 2;
+  }
+
+  .navItems {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .navItem {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navContainer {
+    padding: 10px 12px;
+  }
+
+  .navTitle {
+    font-size: 16px;
+  }
+
+  .logoIcon {
+    font-size: 18px;
+  }
+
+  .navLogo {
+    gap: 8px;
+  }
+
+  .navItems {
+    gap: 2px;
+  }
+
+  .navItem {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .username {
+    font-size: 13px;
+  }
+
+  .logoutBtn {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+}

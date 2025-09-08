@@ -1,0 +1,126 @@
+.storyCard {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.storyCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.storyContent {
+  width: 100%;
+}
+
+.storyTitle {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.storyLink {
+  color: #2d3748;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.storyLink:hover {
+  color: #ff6600;
+}
+
+.storyLink:visited {
+  color: #718096;
+}
+
+.storyMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #666;
+}
+
+.storyScore {
+  color: #ff6600;
+  background: transparent;
+  font-weight: 600;
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 0;
+  border: solid transparent;
+  padding: 0;
+}
+
+.storyScore:hover {
+  background: transparent;
+  color: #ff6600;
+
+}
+
+.storyAuthor {
+  color: #2d3748;
+}
+
+.storyTime {
+  color: #666;
+}
+
+.storyDomain {
+  color: #888;
+  font-style: italic;
+}
+
+.storyActions {
+  display: flex;
+  gap: 16px;
+}
+
+.storyComments {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.storyComments:hover {
+  color: #ff6600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .storyCard {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .storyTitle {
+    font-size: 16px;
+  }
+
+  .storyMeta {
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  .storyMeta {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .storyMeta > span {
+    display: inline-block;
+    margin-right: 12px;
+  }
+}

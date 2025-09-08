@@ -1,0 +1,197 @@
+.storyList {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.storyListHeader {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.refreshButton {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  border-color: #4a5568;
+}
+
+.refreshButton:hover {
+  background: #4a5568;
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.storiesContainer {
+  width: 100%;
+}
+
+.storyItem {
+  opacity: 1;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.nearEnd {
+  background: #737678;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading states */
+.loadingIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6600;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Load more button */
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.loadMoreButton {
+  background: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.loadMoreButton:hover {
+  background: #e55a00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(255, 102, 0, 0.3);
+}
+
+/* Error states */
+.storyListError,
+.storyListEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.errorContent {
+  max-width: 400px;
+}
+
+.storyListError h3,
+.storyListEmpty h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #2d3748;
+}
+
+.storyListError p,
+.storyListEmpty p {
+  font-size: 16px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.retryButton {
+  background: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #e55a00;
+  transform: translateY(-1px);
+}
+
+.loadError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: #fed7d7;
+  border: 1px solid #feb2b2;
+  border-radius: 8px;
+  margin: 16px 0;
+  color: #c53030;
+}
+
+.loadError p {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.endIndicator {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .storyList {
+    padding: 0 16px;
+  }
+
+  .storyListHeader {
+    justify-content: center;
+  }
+
+  .loadingIndicator,
+  .storyListError,
+  .storyListEmpty {
+    padding: 40px 16px;
+  }
+
+  .loadMoreContainer {
+    padding: 24px 16px;
+  }
+}
