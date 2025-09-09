@@ -1,95 +1,17 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import { StoryCard } from '../StoryCard/StoryCard';
 import ButtonSample from '../ButtonSample/ButtonSample';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/store';
-import { 
-  setStoriesForType,
-  setLoading,
-  setError,
-  setHasMore,
-  setCurrentPage,
-  resetStoriesForType
-} from '../../store/slices/StorySlice';
-import { openLoginModal } from '../../store/slices/LoginSlice';
-import { HackerNewsAPI } from '../../services/hackerNewsApi';
+import { useStoryList, useIntersectionObserver } from '../hooks/hooks';
 import classes from './StoryList.module.css';
 
 export const StoryList = () => {
-  const dispatch = useDispatch();
-  const { storiesByType, currentType, loading, error, hasMore, currentPage } = useSelector((state: RootState) => state.story);
-  
-  const stories = storiesByType[currentType] || [];
-
-  const observerRef = useRef<any>(null);
+  const { stories, loading, error, hasMore, loadMore, refresh, handleLoginClick } = useStoryList();
   const loadMoreRef = useRef<any>(null);
 
-  const loadStories = useCallback(async (page = 0, append = false) => {
-    dispatch(setLoading(true));
-    dispatch(setError(null));
-
-    try {
-      const result = await HackerNewsAPI.getPaginatedStories(currentType, page, 30);
-      
-      dispatch(setStoriesForType({
-        type: currentType,
-        stories: result.stories,
-        append
-      }));
-      
-      dispatch(setHasMore(result.hasMore));
-      dispatch(setCurrentPage(page));
-    } catch (err: any) {
-      dispatch(setError(err.message));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [currentType, dispatch]);
-
-  const loadMore = useCallback(() => {
-    if (!loading && hasMore) {
-      loadStories(currentPage + 1, true);
-    }
-  }, [loading, hasMore, currentPage, loadStories]);
-
-  const refresh = useCallback(() => {
-    dispatch(resetStoriesForType(currentType));
-    loadStories(0, false);
-  }, [currentType, dispatch, loadStories]);
-
-  const handleLoginClick = useCallback((message: string) => {
-    dispatch(openLoginModal(message));
-  }, [dispatch]);
-
-  useEffect(() => {
-    loadStories(0, false);
-  }, [currentType]);
-
-  const lastStoryElementRef = useCallback((node) => {
-    if (loading) return;
-    if (observerRef.current && typeof observerRef.current.disconnect === 'function') {
-      observerRef.current.disconnect();
-    }
-    
-    observerRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore && !loading) {
-        loadMore();
-      }
-    }, {
-      threshold: 1.0,
-      rootMargin: '100px'
-    });
-    
-    if (node) observerRef.current.observe(node);
-  }, [loading, hasMore, loadMore]);
-
-  useEffect(() => {
-    return () => {
-      if (observerRef.current && typeof observerRef.current.disconnect === 'function') {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
+  const lastStoryElementRef = useIntersectionObserver({
+    onIntersect: loadMore,
+    enabled: !loading && hasMore
+  });
 
   if (error && stories.length === 0) {
     return (

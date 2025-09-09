@@ -18,6 +18,7 @@
    - Make the comments a dropdown that pushes down the other stories.
    - ❌ Reporting to some fancy site - preferebly DataDog
    - ✅ The use of custom paramteres are not consistent because of the problem said at the first point.
+   - Introduce tagging for tests so you can set in the config which tests you want to run
 
 # If you were to ask what was my hardest challenge? CUCUMBER AUTOCOMPLETE
 
