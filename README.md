@@ -6,18 +6,18 @@
    - No need for cloud deployment.
 
 # Improvements/left to do:
-   ✅ Fix the problem with the types - some cucumber related pain.
-   ✅ Introduce Redux storage / Context
+   - ✅ Fix the problem with the types - some cucumber related pain.
+   - ✅ Introduce Redux storage / Context
    - Introduce Router
    - Introduce CodeceptJS for even better BDD experience.
-   - Indocude Docker and Moon.
-   - Introduce tests with playwright and APIs, intercepting the APIcalls, etc. 
+   - ❌ Indocude Docker and Moon - better stay with local stuff.
+   - ✅ Introduce tests with playwright and APIs, intercepting the APIcalls, etc. 
    - Better error message for login (it is not secure currently :))
    - Security testing, performance testing
-   - Better config files
+   - ✅ Better config files
    - Make the comments a dropdown that pushes down the other stories.
-   - Reporting to some fancy site - preferebly DataDog
-   ✅ The use of custom paramteres are not consistent because of the problem said at the first point.
+   - ❌ Reporting to some fancy site - preferebly DataDog
+   - ✅ The use of custom paramteres are not consistent because of the problem said at the first point.
 
 # If you were to ask what was my hardest challenge? CUCUMBER AUTOCOMPLETE
 

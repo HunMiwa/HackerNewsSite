@@ -11,12 +11,13 @@
     "test": "vitest",
     "bdd": "cucumber-js --config cucumber.mjs",
     "bdd:dev": "HEADLESS=false npm run bdd",
-    "refresh-types": "tsx tests/support/refreshCustomParameters.ts",
-    "test:ui": "vitest --ui"
+    "bdd:debug": "HEADLESS=false DEBUG_SERVER=true npm run bdd",
+    "refresh-types": "tsx tests/support/refreshCustomParameters.ts"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
     "axios": "^1.11.0",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

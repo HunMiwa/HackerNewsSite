@@ -10,3 +10,15 @@ Feature: Home page
     Then I should intercept the API call
     Then I click on the refresh button
     Then I should see the error message
+
+  Scenario: Stories load successfully at each navbar button
+    Given I open Hacker News
+    Then the page title should be visible
+    Then I select the top stories navbar button
+    Then I should see the top stories
+    Then I select the new stories navbar button
+    Then I should see the new stories
+    Then I select the show stories navbar button
+    Then I should see the show stories
+    Then I select the ask stories navbar button
+    Then I should see the ask stories

@@ -12,9 +12,16 @@ const modalType = {
 }
 export type ModalType = (typeof modalType.options)[number]
 
+const navbarButton = {
+  name: 'navbar_button',
+  options: ['top', 'new', 'show', 'ask', 'jobs'] as const
+}
+export type NavbarButton = (typeof navbarButton.options)[number]
+
 const types: ParameterType[] = [
   buttonType,
   modalType,
+  navbarButton,
 ]
 
 export default types

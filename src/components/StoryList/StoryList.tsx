@@ -96,7 +96,7 @@ export const StoryList = () => {
       <div className={classes.storyListError}>
         <div className={classes.errorContent}>
           <h3 id = "error_message">😕 Oops! Something went wrong</h3>
-          <p>{error}</p>
+          <p>{error}</p> {/* This is a bad practice, is it not? */}
           <ButtonSample onClick={refresh}>
             🔄 Try Again
           </ButtonSample>

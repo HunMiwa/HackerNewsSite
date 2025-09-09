@@ -1,6 +1,7 @@
 import homePO from '../page-objects/homePO.js'
 import homeTestData from '../page-objects/homeTestData.js'
 import { CustomWorld } from '../support/world.js'
+import { NavbarButton } from '../types.js'
 import { AssertText } from './core.js'
 
 
@@ -15,7 +16,23 @@ export async function InterceptAPICall(this: CustomWorld) {
 
 export async function CheckErrorMessage(this: CustomWorld) {
   const errorMessage = await this.page.locator(homePO.error_message)
-  await errorMessage.waitFor()
   const errorMessageText = await errorMessage.textContent()
   await AssertText(errorMessageText ?? '', homeTestData.error_message)
+}
+
+export async function CheckStoriesLoadedAPI(this: CustomWorld, navbarButton: NavbarButton) {
+  switch (navbarButton) {
+    case 'top':
+      await this.page.route('**/v0/topstories.json', async route => {
+
+        const request = route.request();
+        expect(request.url()).toContain('/v0/topstories.json');
+        expect(request.method()).toBe('GET');
+        
+        await route.continue();
+      });
+      break
+    case 'new':
+      break
+  }
 }

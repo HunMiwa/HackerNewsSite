@@ -56,7 +56,7 @@ const Navbar = () => {
         <div className={classes.navItems}>
           {navItems.map((item) => (
             <ButtonSample
-              id = {`nav_button_${item.id}`}
+              id = {`${item.id}_btn`}
               key={item.id}
               className={`${classes.navItem} ${
                 currentType === item.id ? classes.navItemActive : ''
