@@ -1,10 +1,9 @@
-// Load environment variables from .env file
 import { config as dotenvConfig } from 'dotenv'
+import playwrightConfig from '../../playwright.config.js'
 dotenvConfig()
 
-// Test environment configuration
 export const config = {
-  baseUrl: process.env.BASE_URL || 'http://localhost:5173',
+  baseUrl: process.env.BASE_URL || playwrightConfig.use?.baseURL,
   timeout: {
     page: parseInt(process.env.PAGE_TIMEOUT || '30000'),
     test: parseInt(process.env.TEST_TIMEOUT || '60000'),
@@ -15,7 +14,6 @@ export const config = {
   }
 }
 
-// Validate required config
 if (!config.baseUrl) {
   throw new Error('BASE_URL environment variable is required')
 }

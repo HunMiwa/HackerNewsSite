@@ -17,7 +17,6 @@ export function registerCustomParameters(): void {
   const json = fs.readFileSync(settingsJson, 'utf8')
   const settings = JSON.parse(json)
   
-  // Generate cucumber.parameterTypes format
   const parameterTypes: { name: string; regexp: string }[] = []
   for (const type of [...types]) {
     parameterTypes.push({ 

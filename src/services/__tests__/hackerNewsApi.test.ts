@@ -3,17 +3,13 @@ import { setupServer } from 'msw/node';
 import { HackerNewsAPI } from '../hackerNewsApi';
 import { handlers, errorHandlers, mockTopStoryIds, mockStoryData } from './mocks/handlers';
 
-// Setup MSW server
 const server = setupServer(...handlers);
 
 describe('HackerNewsAPI with MSW', () => {
-  // Start server before all tests
   beforeAll(() => server.listen());
   
-  // Reset handlers after each test
   afterEach(() => server.resetHandlers());
   
-  // Close server after all tests
   afterAll(() => server.close());
 
   describe('Success scenarios', () => {
@@ -44,10 +40,9 @@ describe('HackerNewsAPI with MSW', () => {
     });
 
     it('should handle null stories (deleted items)', async () => {
-      const storyIds = [37484615, 999999]; // 999999 returns null
+      const storyIds = [37484615, 999999];
       const stories = await HackerNewsAPI.getStories(storyIds);
       
-      // Should filter out null stories
       expect(stories).toHaveLength(1);
       expect(stories[0]).toEqual(mockStoryData[37484615]);
     });
@@ -76,12 +71,10 @@ describe('HackerNewsAPI with MSW', () => {
     });
 
     it('should handle pagination correctly', async () => {
-      // First page
       const page1 = await HackerNewsAPI.getPaginatedStories('top', 0, 2);
       expect(page1.stories).toHaveLength(2);
       expect(page1.hasMore).toBe(true);
       
-      // Last page
       const lastPage = await HackerNewsAPI.getPaginatedStories('top', 2, 5);
       expect(lastPage.hasMore).toBe(false);
     });
@@ -89,7 +82,6 @@ describe('HackerNewsAPI with MSW', () => {
 
   describe('Error scenarios', () => {
     it('should handle network errors gracefully', async () => {
-      // Use error handlers for this test
       server.use(...errorHandlers);
       
       await expect(HackerNewsAPI.getTopStories())
@@ -127,10 +119,8 @@ describe('HackerNewsAPI with MSW', () => {
     });
 
     it('should handle mixed valid/invalid story IDs', async () => {
-      // Mix of valid and null-returning IDs
       const stories = await HackerNewsAPI.getStories([37484615, 999999, 37484323]);
       
-      // Should filter out nulls
       expect(stories).toHaveLength(2);
     });
   });
@@ -140,7 +130,7 @@ describe('HackerNewsAPI with MSW', () => {
       const promises = [
         HackerNewsAPI.getStory(37484615),
         HackerNewsAPI.getStory(37484323),
-        HackerNewsAPI.getStory(12345) // This will be a generic mock
+        HackerNewsAPI.getStory(12345)
       ];
       
       const results = await Promise.all(promises);

@@ -12,23 +12,15 @@ describe('Navbar', () => {
     vi.clearAllMocks();
   });
 
-  const defaultProps = {
-    onNavigate: mockOnNavigate,
-    onLoginClick: mockOnLoginClick,
-    onLogout: mockOnLogout,
-    isLoggedIn: false,
-    username: null as any
-  };
-
   it('renders navbar with logo and title', () => {
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     expect(screen.getByText('📰')).toBeInTheDocument();
     expect(screen.getByText('Hacker News')).toBeInTheDocument();
   });
 
   it('renders all navigation items', () => {
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     expect(screen.getByRole('button', { name: 'top' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'new' })).toBeInTheDocument();
@@ -39,7 +31,7 @@ describe('Navbar', () => {
   });
 
   it('renders navigation items with correct titles', () => {
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     expect(screen.getByTitle('Top Stories')).toBeInTheDocument();
     expect(screen.getByTitle('Newest Stories')).toBeInTheDocument();
@@ -49,14 +41,14 @@ describe('Navbar', () => {
   });
 
   it('shows login button when user is not logged in', () => {
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
     expect(screen.queryByText('logout')).not.toBeInTheDocument();
   });
 
   it('shows username and logout button when user is logged in', () => {
-    render(<Navbar {...defaultProps} isLoggedIn={true} username="testuser"/>);
+    render(<Navbar/>);
     
     expect(screen.getByText('testuser')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'logout' })).toBeInTheDocument();
@@ -65,7 +57,7 @@ describe('Navbar', () => {
 
   it('calls onNavigate when navigation item is clicked', async () => {
     const user = userEvent.setup();
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     const newButton = screen.getByRole('button', { name: 'new' });
     await user.click(newButton);
@@ -75,7 +67,7 @@ describe('Navbar', () => {
 
   it('sets active state on navigation items', async () => {
     const user = userEvent.setup();
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
   
     const topButton = screen.getByRole('button', { name: 'top' });
     expect(topButton.className).toContain('navItemActive');
@@ -89,7 +81,7 @@ describe('Navbar', () => {
 
   it('calls onLoginClick when login button is clicked', async () => {
     const user = userEvent.setup();
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     const loginButton = screen.getByRole('button', { name: 'login' });
     await user.click(loginButton);
@@ -99,7 +91,7 @@ describe('Navbar', () => {
 
   it('calls onLogout when logout button is clicked', async () => {
     const user = userEvent.setup();
-    render(<Navbar {...defaultProps} isLoggedIn={true} username="testuser" />);
+    render(<Navbar/>);
     
     const logoutButton = screen.getByRole('button', { name: 'logout' });
     await user.click(logoutButton);
@@ -109,7 +101,7 @@ describe('Navbar', () => {
 
   it('calls onLoginClick when submit button is clicked and user is not logged in', async () => {
     const user = userEvent.setup();
-    render(<Navbar {...defaultProps} />);
+    render(<Navbar/>);
     
     const submitButton = screen.getByRole('button', { name: 'submit' });
     await user.click(submitButton);
@@ -120,7 +112,7 @@ describe('Navbar', () => {
   it('logs to console when submit button is clicked and user is logged in', async () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const user = userEvent.setup();
-    render(<Navbar {...defaultProps} isLoggedIn={true} username="testuser" />);
+    render(<Navbar/>);
     
     const submitButton = screen.getByRole('button', { name: 'submit' });
     await user.click(submitButton);
@@ -132,11 +124,11 @@ describe('Navbar', () => {
   });
 
   it('shows correct submit button title based on login state', () => {
-    const { rerender } = render(<Navbar {...defaultProps} />);
+    const { rerender } = render(<Navbar/>);
     
     expect(screen.getByTitle('Login to Submit')).toBeInTheDocument();
     
-    rerender(<Navbar {...defaultProps} isLoggedIn={true} username="testuser" />);
+    rerender(<Navbar/>);
     
     expect(screen.getByTitle('Submit a Story')).toBeInTheDocument();
   });

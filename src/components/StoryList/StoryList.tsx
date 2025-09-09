@@ -1,19 +1,69 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { StoryCard } from '../StoryCard/StoryCard';
 import ButtonSample from '../ButtonSample/ButtonSample';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/store';
+import { 
+  setStoriesForType,
+  setLoading,
+  setError,
+  setHasMore,
+  setCurrentPage,
+  resetStoriesForType
+} from '../../store/slices/StorySlice';
+import { openLoginModal } from '../../store/slices/LoginSlice';
+import { HackerNewsAPI } from '../../services/hackerNewsApi';
 import classes from './StoryList.module.css';
 
-export const StoryList = ({ 
-  stories, 
-  loading, 
-  error, 
-  hasMore, 
-  onLoadMore, 
-  onRefresh,
-  onLoginClick 
-}) => {
+export const StoryList = () => {
+  const dispatch = useDispatch();
+  const { storiesByType, currentType, loading, error, hasMore, currentPage } = useSelector((state: RootState) => state.story);
+  
+  const stories = storiesByType[currentType] || [];
+
   const observerRef = useRef<any>(null);
   const loadMoreRef = useRef<any>(null);
+
+  const loadStories = useCallback(async (page = 0, append = false) => {
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+
+    try {
+      const result = await HackerNewsAPI.getPaginatedStories(currentType, page, 30);
+      
+      dispatch(setStoriesForType({
+        type: currentType,
+        stories: result.stories,
+        append
+      }));
+      
+      dispatch(setHasMore(result.hasMore));
+      dispatch(setCurrentPage(page));
+    } catch (err: any) {
+      dispatch(setError(err.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }, [currentType, dispatch]);
+
+  const loadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      loadStories(currentPage + 1, true);
+    }
+  }, [loading, hasMore, currentPage, loadStories]);
+
+  const refresh = useCallback(() => {
+    dispatch(resetStoriesForType(currentType));
+    loadStories(0, false);
+  }, [currentType, dispatch, loadStories]);
+
+  const handleLoginClick = useCallback((message: string) => {
+    dispatch(openLoginModal(message));
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadStories(0, false);
+  }, [currentType]);
 
   const lastStoryElementRef = useCallback((node) => {
     if (loading) return;
@@ -23,7 +73,7 @@ export const StoryList = ({
     
     observerRef.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasMore && !loading) {
-        onLoadMore();
+        loadMore();
       }
     }, {
       threshold: 1.0,
@@ -31,7 +81,7 @@ export const StoryList = ({
     });
     
     if (node) observerRef.current.observe(node);
-  }, [loading, hasMore, onLoadMore]);
+  }, [loading, hasMore, loadMore]);
 
   useEffect(() => {
     return () => {
@@ -44,10 +94,10 @@ export const StoryList = ({
   if (error && stories.length === 0) {
     return (
       <div className={classes.storyListError}>
-        <div className={classes.errorContent} id = "error_message">
-          <h3>😕 Oops! Something went wrong</h3>
+        <div className={classes.errorContent}>
+          <h3 id = "error_message">😕 Oops! Something went wrong</h3>
           <p>{error}</p>
-          <ButtonSample onClick={onRefresh}>
+          <ButtonSample onClick={refresh}>
             🔄 Try Again
           </ButtonSample>
         </div>
@@ -60,7 +110,7 @@ export const StoryList = ({
       <div className={classes.storyListEmpty} id = "empty_error_message">
         <h3>📭 No stories found</h3>
         <p>Try refreshing the page or check back later.</p>
-        <ButtonSample onClick={onRefresh}>
+          <ButtonSample onClick={refresh}>
           🔄 Refresh
         </ButtonSample>
       </div>
@@ -70,7 +120,7 @@ export const StoryList = ({
   return (
     <div className={classes.storyList}>
       <div className={classes.storyListHeader}>
-        <ButtonSample onClick={onRefresh} disabled={loading} className={classes.refreshButton} id = "refresh_btn">
+        <ButtonSample onClick={refresh} disabled={loading} className={classes.refreshButton} id = "refresh_btn">
           🔄 Refresh
         </ButtonSample>
       </div>
@@ -85,7 +135,7 @@ export const StoryList = ({
               ref={isLastElement ? lastStoryElementRef : null}
               className={classes.storyItem}
             >
-              <StoryCard story={story} onLoginClick={onLoginClick} />
+              <StoryCard story={story} onLoginClick={handleLoginClick} />
             </div>
           );
         })}
@@ -102,7 +152,7 @@ export const StoryList = ({
         <div className={classes.loadMoreContainer} id = "load_more_btn">
           <ButtonSample 
             ref={loadMoreRef}
-            onClick={onLoadMore}
+            onClick={loadMore}
           >
             Load More Stories
           </ButtonSample>
@@ -118,7 +168,7 @@ export const StoryList = ({
       {error && stories.length > 0 && (
         <div className={classes.loadError} id = "load_error_message">
           <p>Failed to load more stories: {error}</p>
-          <ButtonSample onClick={onLoadMore}>
+          <ButtonSample onClick={loadMore}>
             Try Again
           </ButtonSample>
         </div>

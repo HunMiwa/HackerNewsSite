@@ -5,7 +5,6 @@ export interface CustomWorld {
   page: Page
 }
 
-// Extend the Cucumber World type
 declare module '@cucumber/cucumber' {
   interface World extends CustomWorld {}
 }

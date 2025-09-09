@@ -1,31 +1,37 @@
 import { useState } from 'react';
 import ButtonSample from '../ButtonSample/ButtonSample';
 import classes from './Navbar.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { setStoryType } from '../../store/slices/StorySlice';
+import { openLoginModal, logout } from '../../store/slices/LoginSlice';
+import { RootState } from '../../store/store';
 
-const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, username }) => {
-  const [activeItem, setActiveItem] = useState('top');
+const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  
+  const { user } = useSelector((state: RootState) => state.login);
+  const { currentType } = useSelector((state: RootState) => state.story);
+  const isLoggedIn = !!user;
+  const username = user?.username;
 
   const navItems = [
-    { id: 'top', label: 'top', title: 'Top Stories' },
-    { id: 'new', label: 'new', title: 'Newest Stories' },
-    { id: 'ask', label: 'ask', title: 'Ask HN' },
-    { id: 'show', label: 'show', title: 'Show HN' },
-    { id: 'jobs', label: 'jobs', title: 'Jobs' },
+    { id: 'top', title: 'Top Stories' },
+    { id: 'new', title: 'Newest Stories' },
+    { id: 'ask', title: 'Ask HN' },
+    { id: 'show', title: 'Show HN' },
+    { id: 'jobs', title: 'Jobs' },
   ];
 
   const handleNavClick = (item) => {
-    setActiveItem(item.id);
-    if (onNavigate) {
-      onNavigate(item.id);
-    }
+    dispatch(setStoryType(item.id));
   };
 
   const handleSubmitClick = () => {
     if (isLoggedIn) {
       console.log('Navigate to submit page');
     } else {
-      onLoginClick();
+      dispatch(openLoginModal(null));
     }
     setIsMobileMenuOpen(false);
   };
@@ -53,12 +59,12 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
               id = {`nav_button_${item.id}`}
               key={item.id}
               className={`${classes.navItem} ${
-                activeItem === item.id ? classes.navItemActive : ''
+                currentType === item.id ? classes.navItemActive : ''
               }`}
               onClick={() => handleNavClick(item)}
               title={item.title}
             >
-              {item.label}
+              {item.title}
             </ButtonSample>
           ))}
           
@@ -89,7 +95,7 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
               <span className={classes.username} id = "nav_username">{username}</span>
               <button 
                 className={classes.logoutBtn} 
-                onClick={onLogout}
+                onClick={() => dispatch(logout())}
                 title="Logout"
                 id = "logout_btn"
               >
@@ -98,7 +104,7 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
             </div>
           ) : (
             <ButtonSample
-              onClick={onLoginClick}
+              onClick={() => dispatch(openLoginModal(null))}
               className={classes.loginBtn}
               id = "login_btn"
             >
@@ -116,12 +122,12 @@ const Navbar = ({ onNavigate, onLoginClick, onLogout, isLoggedIn = false, userna
                 id = {`mobile_nav_button_${item.id}`}
                 key={item.id}
                 className={`${classes.mobileNavItem} ${
-                  activeItem === item.id ? classes.mobileNavItemActive : ''
+                  currentType === item.id ? classes.mobileNavItemActive : ''
                 }`}
                 onClick={() => handleMobileNavClick(item)}
                 title={item.title}
               >
-                {item.label}
+                {item.title}
               </ButtonSample>
             ))}
             

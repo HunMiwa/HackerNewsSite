@@ -15,6 +15,7 @@ export async function InterceptAPICall(this: CustomWorld) {
 
 export async function CheckErrorMessage(this: CustomWorld) {
   const errorMessage = await this.page.locator(homePO.error_message)
+  await errorMessage.waitFor()
   const errorMessageText = await errorMessage.textContent()
-  await AssertText(homeTestData.error_message, errorMessageText ?? '')
+  await AssertText(errorMessageText ?? '', homeTestData.error_message)
 }

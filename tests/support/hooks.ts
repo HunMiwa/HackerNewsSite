@@ -2,6 +2,7 @@ import { After, Before, BeforeAll, AfterAll } from '@cucumber/cucumber'
 import { chromium } from '@playwright/test'
 import { spawn, exec } from 'child_process'
 import { promisify } from 'util'
+import { config } from './config.js'
 
 const execPromise = promisify(exec)
 let devServerProcess: any = null
@@ -9,7 +10,6 @@ let devServerProcess: any = null
 BeforeAll({ timeout: 15000 }, async function () {
   console.log('Killing any existing background processes...')
   
-  // Kill any existing processes that might be using the dev server port (typically 5173 for Vite)
   try {
     if (process.platform === 'win32') {
       await execPromise('taskkill /f /im node.exe')
@@ -26,7 +26,6 @@ BeforeAll({ timeout: 15000 }, async function () {
 
   console.log('Starting new dev server...')
   
-  // Start the dev server
   devServerProcess = spawn('npm', ['run', 'dev'], {
     stdio: 'pipe',
     detached: false,
@@ -41,7 +40,6 @@ BeforeAll({ timeout: 15000 }, async function () {
     console.log(`Dev server stderr: ${data}`)
   })
 
-  // Wait for the dev server to start (give it some time to boot up)
   await new Promise(resolve => setTimeout(resolve, 8000))
   console.log('Dev server should be ready!')
 })
@@ -52,7 +50,6 @@ AfterAll(async function () {
   if (devServerProcess) {
     devServerProcess.kill('SIGTERM')
     
-    // Wait a bit for graceful shutdown, then force kill if needed
     await new Promise(resolve => setTimeout(resolve, 2000))
     
     if (!devServerProcess.killed) {
@@ -66,7 +63,10 @@ AfterAll(async function () {
 })
 
 Before(async function () {
-  this.browser = await chromium.launch()
+  this.browser = await chromium.launch({
+    headless: config.browser.headless,
+    slowMo: config.browser.slowMo
+  })
   this.page = await this.browser.newPage()
 })
 

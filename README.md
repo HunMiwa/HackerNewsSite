@@ -4,10 +4,11 @@
    - No need for in-depth testing plan or too big of a test coverage for the above reasons.
    - No need for fancy animations.
    - No need for cloud deployment.
-   - No need for routing.
 
 # Improvements/left to do:
    ✅ Fix the problem with the types - some cucumber related pain.
+   ✅ Introduce Redux storage / Context
+   - Introduce Router
    - Introduce CodeceptJS for even better BDD experience.
    - Indocude Docker and Moon.
    - Introduce tests with playwright and APIs, intercepting the APIcalls, etc. 
@@ -16,8 +17,7 @@
    - Better config files
    - Make the comments a dropdown that pushes down the other stories.
    - Reporting to some fancy site - preferebly DataDog
-   - The use of custom paramteres are not consistent because of the problem said at the first point.
-   - Introduce context?
+   ✅ The use of custom paramteres are not consistent because of the problem said at the first point.
 
 # If you were to ask what was my hardest challenge? CUCUMBER AUTOCOMPLETE
 

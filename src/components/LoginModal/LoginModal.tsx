@@ -2,7 +2,17 @@ import { useState, useEffect } from 'react';
 import ButtonSample from '../ButtonSample/ButtonSample';
 import classes from './LoginModal.module.css';
 
-const LoginModal = ({ onLogin, onClose, isOpen = false, customMessage = null, modaltype }) => {
+import { useDispatch } from 'react-redux';
+import { login, closeLoginModal } from '../../store/slices/LoginSlice';
+
+interface LoginModalProps {
+  isOpen?: boolean;
+  customMessage?: string | null;
+  modaltype: string;
+}
+
+const LoginModal = ({ isOpen = false, customMessage = null, modaltype }: LoginModalProps) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -65,16 +75,9 @@ const LoginModal = ({ onLogin, onClose, isOpen = false, customMessage = null, mo
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      if (onLogin) {
-        onLogin(formData.username);
-      }
-      
+      dispatch(login(formData.username));
       setFormData({ username: '', password: '' });
       setErrors({});
-      
-      if (onClose) {
-        onClose();
-      }
     } catch (error) {
       setErrors({ general: 'Login failed. Please try again.' });
     } finally {
@@ -83,8 +86,8 @@ const LoginModal = ({ onLogin, onClose, isOpen = false, customMessage = null, mo
   };
 
   const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget && onClose) {
-      onClose();
+    if (e.target === e.currentTarget) {
+      dispatch(closeLoginModal());
     }
   };
 
@@ -103,7 +106,7 @@ const LoginModal = ({ onLogin, onClose, isOpen = false, customMessage = null, mo
         <button 
           className={classes.closeBtn}
           id = "close_btn"
-          onClick={onClose}
+          onClick={() => dispatch(closeLoginModal())}
           aria-label="Close login modal"
         >
           ✕
