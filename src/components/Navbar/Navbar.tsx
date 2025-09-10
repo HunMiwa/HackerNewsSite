@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import ButtonSample from '../ButtonSample/ButtonSample';
+import ButtonSample from '../Button/Button';
 import classes from './Navbar.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { openLoginModal, logout } from '../../store/slices/LoginSlice';
 import { RootState } from '../../store/store';
+import { NavItem } from '../../services/types';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ const Navbar = () => {
   const isLoggedIn = !!user;
   const username = user?.username;
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { id: 'top', title: 'Top Stories' },
     { id: 'new', title: 'Newest Stories' },
     { id: 'ask', title: 'Ask' },

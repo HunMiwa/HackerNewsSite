@@ -2,19 +2,7 @@ import { forwardRef, useState } from 'react';
 import classes from './RepliesCard.module.css';
 import formatTime from '../../services/format_time';
 import { GetReplies } from '../../quaries/Comments';
-
-interface Comment {
-  id: number;
-  by: string;
-  time: number;
-  text: string;
-  kids?: number[];
-}
-
-interface RepliesCardProps {
-  comment: Comment;
-  level: number;
-}
+import { RepliesCardProps } from '../../services/types';
 
 export const RepliesCard = forwardRef<HTMLDivElement, RepliesCardProps>(({ comment, level }, ref) => {
   const [showReplies, setShowReplies] = useState(false);

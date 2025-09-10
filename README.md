@@ -8,19 +8,20 @@
 # Improvements/left to do:
    - ✅ Fix the problem with the types - some cucumber related pain.
    - ✅ Introduce Redux storage / Context
-   - Introduce Router
+   - ✅ Introduce Router
    - Introduce CodeceptJS for even better BDD experience.
    - ❌ Indocude Docker and Moon - better stay with local stuff.
    - ✅ Introduce tests with playwright and APIs, intercepting the APIcalls, etc. 
    - Better error message for login (it is not secure currently :))
    - Security testing, performance testing
    - ✅ Better config files
-   - Make the comments a dropdown that pushes down the other stories.
+   - ✅ Make the comments!
    - ❌ Reporting to some fancy site - preferebly DataDog
    - ✅ The use of custom paramteres are not consistent because of the problem said at the first point.
    - Introduce tagging for tests so you can set in the config which tests you want to run
+   - Change from React Route to Tanstack Route
 
-# If you were to ask what was my hardest challenge? CUCUMBER AUTOCOMPLETE
+# While I still had time I decided to go through the todo list and make everything I can from it :)
 
 ### How to use:
 

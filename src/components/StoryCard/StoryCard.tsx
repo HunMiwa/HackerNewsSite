@@ -1,5 +1,5 @@
 import classes from './StoryCard.module.css';
-import ButtonSample from '../ButtonSample/ButtonSample';
+import ButtonSample from '../Button/Button';
 import { Link } from 'react-router-dom';
 import formatTime from '../../services/format_time';
 

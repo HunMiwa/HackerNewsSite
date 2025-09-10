@@ -1,6 +1,6 @@
-import classes from './ButtonSample.module.css';
+import classes from './Button.module.css';
 
-const ButtonSample = ({ 
+const Button = ({ 
   children, 
   onClick, 
   disabled = false, 
@@ -21,4 +21,4 @@ const ButtonSample = ({
   );
 };
 
-export default ButtonSample;
+export default Button;

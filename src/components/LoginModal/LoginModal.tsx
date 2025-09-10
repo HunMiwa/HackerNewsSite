@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ButtonSample from '../ButtonSample/ButtonSample';
+import ButtonSample from '../Button/Button';
 import classes from './LoginModal.module.css';
 
 import { useDispatch } from 'react-redux';

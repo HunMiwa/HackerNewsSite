@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { StoryCard } from '../StoryCard/StoryCard';
-import ButtonSample from '../ButtonSample/ButtonSample';
+import ButtonSample from '../Button/Button';
 import { useStoryList, useIntersectionObserver } from '../hooks/hooks';
 import classes from './StoryList.module.css';
 

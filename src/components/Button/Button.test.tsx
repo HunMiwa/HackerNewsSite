@@ -1,17 +1,17 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ButtonSample from '../ButtonSample/ButtonSample';
+import Button from './Button';
 
 describe('ButtonSample', () => {
   it('renders button with children', () => {
-    render(<ButtonSample onClick={() => {}}>Click me</ButtonSample>);
+    render(<Button onClick={() => {}}>Click me</Button>);
     
     expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument();
   });
 
   it('applies default props', () => {
-    render(<ButtonSample onClick={() => {}}>Test</ButtonSample>);
+    render(<Button onClick={() => {}}>Test</Button>);
     
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('type', 'button');
@@ -22,7 +22,7 @@ describe('ButtonSample', () => {
     const mockClick = vi.fn();
     const user = userEvent.setup();
     
-    render(<ButtonSample onClick={mockClick}>Click me</ButtonSample>);
+    render(<Button onClick={mockClick}>Click me</Button>);
     
     const button = screen.getByRole('button');
     await user.click(button);
@@ -31,28 +31,28 @@ describe('ButtonSample', () => {
   });
 
   it('can be disabled', () => {
-    render(<ButtonSample onClick={() => {}} disabled>Disabled</ButtonSample>);
+    render(<Button onClick={() => {}} disabled>Disabled</Button>);
     
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
 
   it('accepts custom type', () => {
-    render(<ButtonSample onClick={() => {}} type="submit">Submit</ButtonSample>);
+    render(<Button onClick={() => {}} type="submit">Submit</Button>);
     
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('type', 'submit');
   });
 
   it('applies custom className', () => {
-    render(<ButtonSample onClick={() => {}} className="custom-class">Test</ButtonSample>);
+    render(<Button onClick={() => {}} className="custom-class">Test</Button>);
     
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-class');
   });
 
   it('passes through additional props', () => {
-    render(<ButtonSample onClick={() => {}} title="Custom title" data-testid="test-button">Test</ButtonSample>);
+    render(<Button onClick={() => {}} title="Custom title" data-testid="test-button">Test</Button>);
     
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('title', 'Custom title');
@@ -63,7 +63,7 @@ describe('ButtonSample', () => {
     const mockClick = vi.fn();
     const user = userEvent.setup();
     
-    render(<ButtonSample onClick={mockClick} disabled>Disabled</ButtonSample>);
+    render(<Button onClick={mockClick} disabled>Disabled</Button>);
     
     const button = screen.getByRole('button');
     await user.click(button);
@@ -73,10 +73,10 @@ describe('ButtonSample', () => {
 
   it('renders complex children', () => {
     render(
-      <ButtonSample onClick={() => {}}>
+      <Button onClick={() => {}}>
         <span>Icon</span>
         <span>Text</span>
-      </ButtonSample>
+      </Button>
     );
     
     expect(screen.getByText('Icon')).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe('ButtonSample', () => {
 
   it('maintains focus behavior', async () => {
     const user = userEvent.setup();
-    render(<ButtonSample onClick={() => {}}>Focusable</ButtonSample>);
+    render(<Button onClick={() => {}}>Focusable</Button>);
     
     const button = screen.getByRole('button');
     await user.tab();

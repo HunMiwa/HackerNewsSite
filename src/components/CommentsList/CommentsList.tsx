@@ -1,9 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { RepliesCard } from '../RepliesCard/RepliesCard';
-import ButtonSample from '../ButtonSample/ButtonSample';
+import ButtonSample from '../Button/Button';
 import classes from './CommentsList.module.css';
 import { GetComments } from '../../quaries/Comments';
 import { GetStory } from '../../quaries/Stories';
+import { Comment } from '../../services/types';
 
 export const CommentsList = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ export const CommentsList = () => {
   const { data: commentsData, isLoading: loadingComments, error: commentsError, refetch: refetchComments } = GetComments(storyId);
   const { data: story, isLoading: loadingStory, error: storyError, refetch: refetchStory } = GetStory(storyId);
   
-  const comments = commentsData?.comments || [];
+  const comments: Comment[] = commentsData?.comments || [];
   const isLoading = loadingComments || loadingStory;
   const error = commentsError || storyError;
 
