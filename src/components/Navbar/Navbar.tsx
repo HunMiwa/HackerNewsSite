@@ -1,31 +1,28 @@
 import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import ButtonSample from '../ButtonSample/ButtonSample';
 import classes from './Navbar.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { setStoryType } from '../../store/slices/StorySlice';
 import { openLoginModal, logout } from '../../store/slices/LoginSlice';
 import { RootState } from '../../store/store';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dispatch = useDispatch();
+  const { type } = useParams();
   
   const { user } = useSelector((state: RootState) => state.login);
-  const { currentType } = useSelector((state: RootState) => state.story);
+  const currentType = type || 'top';
   const isLoggedIn = !!user;
   const username = user?.username;
 
   const navItems = [
     { id: 'top', title: 'Top Stories' },
     { id: 'new', title: 'Newest Stories' },
-    { id: 'ask', title: 'Ask HN' },
-    { id: 'show', title: 'Show HN' },
+    { id: 'ask', title: 'Ask' },
+    { id: 'show', title: 'Show' },
     { id: 'jobs', title: 'Jobs' },
   ];
-
-  const handleNavClick = (item) => {
-    dispatch(setStoryType(item.id));
-  };
 
   const handleSubmitClick = () => {
     if (isLoggedIn) {
@@ -40,8 +37,7 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleMobileNavClick = (item) => {
-    handleNavClick(item);
+  const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -55,17 +51,16 @@ const Navbar = () => {
 
         <div className={classes.navItems}>
           {navItems.map((item) => (
-            <ButtonSample
-              id = {`${item.id}_btn`}
+            <Link id = {`${item.id}_btn`}
               key={item.id}
+              to={item.id === 'top' ? '/' : `/${item.id}`}
               className={`${classes.navItem} ${
                 currentType === item.id ? classes.navItemActive : ''
               }`}
-              onClick={() => handleNavClick(item)}
               title={item.title}
             >
               {item.title}
-            </ButtonSample>
+            </Link>
           ))}
           
           <ButtonSample
@@ -118,17 +113,18 @@ const Navbar = () => {
         <div className={classes.mobileMenuOverlay}>
           <div className={classes.mobileMenu}>
             {navItems.map((item) => (
-              <ButtonSample
+              <Link
                 id = {`mobile_nav_button_${item.id}`}
                 key={item.id}
+                to={item.id === 'top' ? '/' : `/${item.id}`}
                 className={`${classes.mobileNavItem} ${
                   currentType === item.id ? classes.mobileNavItemActive : ''
                 }`}
-                onClick={() => handleMobileNavClick(item)}
+                onClick={handleMobileNavClick}
                 title={item.title}
               >
                 {item.title}
-              </ButtonSample>
+              </Link>
             ))}
             
             <ButtonSample

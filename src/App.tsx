@@ -1,14 +1,15 @@
 import Navbar from './components/Navbar/Navbar';
-import { StoryList } from './components/StoryList/StoryList';
 import LoginModal from './components/LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import classes from './App.module.css';
+import { Outlet } from 'react-router-dom';
 
 function App() {
   const { isLoginModalOpen, loginMessage } = useSelector((state: RootState) => state.login);
 
   return (
+
     <div className={classes.app}>
       <Navbar />
       <header className={classes.appHeader}>
@@ -18,7 +19,7 @@ function App() {
       </header>
 
       <main className={classes.appMain}>
-        <StoryList />
+        <Outlet />
       </main>
 
       <LoginModal

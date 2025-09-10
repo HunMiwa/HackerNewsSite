@@ -1,5 +1,7 @@
 import classes from './StoryCard.module.css';
 import ButtonSample from '../ButtonSample/ButtonSample';
+import { Link } from 'react-router-dom';
+import formatTime from '../../services/format_time';
 
 export const StoryCard = ({ story, onLoginClick }) => {
 
@@ -14,23 +16,6 @@ export const StoryCard = ({ story, onLoginClick }) => {
     descendants: commentCount = 0,
     id
   } = story;
-
-  const formatTime = (timestamp) => {
-    const date = new Date(timestamp * 1000) as any;
-    const now = new Date() as any;
-    const diffInHours = (now - date) / (1000 * 60 * 60);
-
-    if (diffInHours < 1) {
-      return `${Math.floor(diffInHours * 60)} minutes ago`;
-    } else if (diffInHours < 2) {
-      return `${Math.floor(diffInHours)} hour ago`;
-    }
-    else if (diffInHours < 24) {
-      return `${Math.floor(diffInHours)} hours ago`;
-    } else {
-      return `${Math.floor(diffInHours / 24)} days ago`;
-    }
-  };
 
   const getDomain = (url) => {
     if (!url) return 'news.ycombinator.com';
@@ -98,15 +83,9 @@ export const StoryCard = ({ story, onLoginClick }) => {
         </div>
         
         <div className={classes.storyActions} id = "story_actions">
-          <a 
-            href={getHackerNewsUrl()} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={classes.storyComments}
-            id = "story_comments"
-          >
+          <Link to={`/story/${id}/comments`}>
             💬 {commentCount} comments
-          </a>
+          </Link>
         </div>
       </div>
     </article>

@@ -1,8 +1,9 @@
 import { useCallback, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../store/store';
-import { loadStoriesThunk, loadMoreStoriesThunk, refreshStoriesThunk } from '../../store/slices/StorySlice';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { AppDispatch } from '../../store/store';
 import { openLoginModal } from '../../store/slices/LoginSlice';
+import { GetInfiniteStories } from '../../quaries/Stories';
 
 export interface UseIntersectionObserverOptions {
   threshold?: number;
@@ -56,40 +57,43 @@ export const useIntersectionObserver = ({
 
 export const useStoryList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { storiesByType, currentType, loading, error, hasMore, currentPage } = useSelector((state: RootState) => state.story);
+  // Get story type from URL params instead of Redux
+  const { type } = useParams();
+  const currentType = type || 'top';
   
-  const stories = storiesByType[currentType] || [];
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch
+  } = GetInfiniteStories(currentType, 30);
 
-  const loadStories = useCallback((type: string, page = 0, append = false) => {
-    dispatch(loadStoriesThunk({ type: type as any, page, append }));
-  }, [dispatch]);
+  const stories = data?.pages.flatMap(page => page.stories) || [];
 
   const loadMore = useCallback(() => {
-    if (!loading && hasMore) {
-      dispatch(loadMoreStoriesThunk());
+    if (!isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
     }
-  }, [dispatch, loading, hasMore]);
+  }, [fetchNextPage, isFetchingNextPage, hasNextPage]);
 
   const refresh = useCallback(() => {
-    dispatch(refreshStoriesThunk());
-  }, [dispatch]);
+    refetch();
+  }, [refetch]);
 
   const handleLoginClick = useCallback((message: string) => {
     dispatch(openLoginModal(message));
   }, [dispatch]);
 
-  useEffect(() => {
-    loadStories(currentType, 0, false);
-  }, [currentType, loadStories]);
-
   return {
     stories,
     currentType,
-    loading,
-    error,
-    hasMore,
-    currentPage,
-    loadStories,
+    loading: isLoading || isFetchingNextPage,
+    error: error?.message,
+    hasMore: hasNextPage,
+    currentPage: data?.pages.length || 0,
     loadMore,
     refresh,
     handleLoginClick

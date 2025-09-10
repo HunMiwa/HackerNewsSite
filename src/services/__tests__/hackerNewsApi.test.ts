@@ -14,7 +14,7 @@ describe('HackerNewsAPI with MSW', () => {
 
   describe('Success scenarios', () => {
     it('should fetch top stories successfully', async () => {
-      const topStories = await HackerNewsAPI.getTopStories();
+      const topStories = await HackerNewsAPI.getStoriesByType('top');
       
       expect(topStories).toEqual(mockTopStoryIds);
       expect(Array.isArray(topStories)).toBe(true);
@@ -59,10 +59,10 @@ describe('HackerNewsAPI with MSW', () => {
     });
 
     it('should fetch different story types', async () => {
-      const newStories = await HackerNewsAPI.getNewStories();
-      const askStories = await HackerNewsAPI.getAskStories();
-      const showStories = await HackerNewsAPI.getShowStories();
-      const jobs = await HackerNewsAPI.getJobs();
+      const newStories = await HackerNewsAPI.getStoriesByType('new');
+      const askStories = await HackerNewsAPI.getStoriesByType('ask');
+      const showStories = await HackerNewsAPI.getStoriesByType('show');
+      const jobs = await HackerNewsAPI.getStoriesByType('jobs');
       
       expect(Array.isArray(newStories)).toBe(true);
       expect(Array.isArray(askStories)).toBe(true);
@@ -84,7 +84,7 @@ describe('HackerNewsAPI with MSW', () => {
     it('should handle network errors gracefully', async () => {
       server.use(...errorHandlers);
       
-      await expect(HackerNewsAPI.getTopStories())
+      await expect(HackerNewsAPI.getStoriesByType('top'))
         .rejects
         .toThrow('Failed to fetch top stories');
     });
