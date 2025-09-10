@@ -17,6 +17,11 @@ Then('I select the {navbar_button} stories navbar button', async function (navba
 
 Then('I should see the {navbar_button} stories', async function (navbarButton: NavbarButton) {
   await home.CheckStoriesLoadedAPI.call(this as any, navbarButton)
+  await home.WaitNetworkIdle.call(this as any)
+})
+
+Then('I should wait for network to be idle', async function () {
+  await home.WaitNetworkIdle.call(this as any)
 })
 
 

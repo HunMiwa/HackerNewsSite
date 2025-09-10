@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { renderWithProviders } from '../../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import LoginModal from './LoginModal';
 
@@ -19,12 +20,12 @@ describe('LoginModal', () => {
   };
 
   it('does not render when isOpen is false', () => {
-    const { container } = render(<LoginModal {...defaultProps} isOpen={false} />);
+    const { container } = renderWithProviders(<LoginModal {...defaultProps} isOpen={false} />);
     expect(container.firstChild).toBeNull();
   });
 
   it('renders login form with correct elements', () => {
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     expect(screen.getByText('Welcome Back')).toBeInTheDocument();
     expect(screen.getByLabelText('Username')).toBeInTheDocument();
@@ -34,7 +35,7 @@ describe('LoginModal', () => {
   });
 
   it('renders register form when modaltype is register', () => {
-    render(<LoginModal {...defaultProps} modaltype="register" />);
+    renderWithProviders(<LoginModal {...defaultProps} modaltype="register" />);
     
     expect(screen.getByText('Join Hacker News')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Create Account' })).toBeInTheDocument();
@@ -44,14 +45,14 @@ describe('LoginModal', () => {
 
   it('displays custom message when provided', () => {
     const customMessage = 'Please log in to continue';
-    render(<LoginModal {...defaultProps} customMessage={customMessage as any} />);
+    renderWithProviders(<LoginModal {...defaultProps} customMessage={customMessage as any} />);
     
     expect(screen.getByText(customMessage)).toBeInTheDocument();
   });
 
   it('validates form fields correctly', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
     await user.click(submitButton);
@@ -62,7 +63,7 @@ describe('LoginModal', () => {
 
   it('validates username length', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username');
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
@@ -75,7 +76,7 @@ describe('LoginModal', () => {
 
   it('validates password length', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     const passwordInput = screen.getByLabelText('Password');
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
@@ -88,7 +89,7 @@ describe('LoginModal', () => {
 
   it('clears errors when user starts typing', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username');
     const submitButton = screen.getByRole('button', { name: 'Sign In' });
@@ -102,7 +103,14 @@ describe('LoginModal', () => {
 
   it('submits form with valid data', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    const preloadedState = {
+      login: {
+        user: null,
+        isLoginModalOpen: true,
+        loginMessage: null
+      }
+    };
+    const { store } = renderWithProviders(<LoginModal {...defaultProps} />, { preloadedState });
     
     const usernameInput = screen.getByLabelText('Username');
     const passwordInput = screen.getByLabelText('Password');
@@ -115,14 +123,15 @@ describe('LoginModal', () => {
     expect(screen.getByText('Signing In...')).toBeInTheDocument();
     
     await waitFor(() => {
-      expect(mockOnLogin).toHaveBeenCalledWith('testuser');
-      expect(mockOnClose).toHaveBeenCalled();
+      const state = store.getState();
+      expect(state.login.user?.username).toBe('testuser');
+      expect(state.login.isLoginModalOpen).toBe(false);
     }, { timeout: 2500 });
   });
 
   it('toggles between login and register modes', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     expect(screen.getByText('Welcome Back')).toBeInTheDocument();
     
@@ -135,36 +144,61 @@ describe('LoginModal', () => {
 
   it('closes modal when overlay is clicked', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    const preloadedState = {
+      login: {
+        user: null,
+        isLoginModalOpen: true,
+        loginMessage: null
+      }
+    };
+    const { store } = renderWithProviders(<LoginModal {...defaultProps} />, { preloadedState });
     
     const overlay = document.querySelector('[class*="loginOverlay"]') as HTMLElement;
     await user.click(overlay);
     
-    expect(mockOnClose).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(store.getState().login.isLoginModalOpen).toBe(false);
+    });
   });
 
   it('closes modal when close button is clicked', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    const preloadedState = {
+      login: {
+        user: null,
+        isLoginModalOpen: true,
+        loginMessage: null
+      }
+    };
+    const { store } = renderWithProviders(<LoginModal {...defaultProps} />, { preloadedState });
     
     const closeButton = screen.getByRole('button', { name: 'Close login modal' });
     await user.click(closeButton);
     
-    expect(mockOnClose).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(store.getState().login.isLoginModalOpen).toBe(false);
+    });
   });
 
   it('does not close when clicking inside modal', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    const preloadedState = {
+      login: {
+        user: null,
+        isLoginModalOpen: true,
+        loginMessage: null
+      }
+    };
+    const { store } = renderWithProviders(<LoginModal {...defaultProps} />, { preloadedState });
     
-    const modal = document.querySelector('.loginModal') as HTMLElement;
+    const modal = document.querySelector('[class*="loginModal"]') as HTMLElement;
     await user.click(modal);
     
-    expect(mockOnClose).not.toHaveBeenCalled();
+    expect(store.getState().login.isLoginModalOpen).toBe(true);
   });
 
   it('resets form when modal opens', () => {
-    const { rerender } = render(<LoginModal {...defaultProps} isOpen={false} />);
+    const { rerender } = renderWithProviders(<LoginModal {...defaultProps} isOpen={false} />);
     
     rerender(<LoginModal {...defaultProps} isOpen={true} modaltype="login" />);
     
@@ -177,7 +211,7 @@ describe('LoginModal', () => {
 
   it('disables form inputs when loading', async () => {
     const user = userEvent.setup();
-    render(<LoginModal {...defaultProps} />);
+    renderWithProviders(<LoginModal {...defaultProps} />);
     
     const usernameInput = screen.getByLabelText('Username') as HTMLInputElement;
     const passwordInput = screen.getByLabelText('Password') as HTMLInputElement;

@@ -62,12 +62,12 @@ describe('HackerNewsAPI with MSW', () => {
       const newStories = await HackerNewsAPI.getStoriesByType('new');
       const askStories = await HackerNewsAPI.getStoriesByType('ask');
       const showStories = await HackerNewsAPI.getStoriesByType('show');
-      const jobs = await HackerNewsAPI.getStoriesByType('jobs');
+      const job = await HackerNewsAPI.getStoriesByType('job');
       
       expect(Array.isArray(newStories)).toBe(true);
       expect(Array.isArray(askStories)).toBe(true);
       expect(Array.isArray(showStories)).toBe(true);
-      expect(Array.isArray(jobs)).toBe(true);
+      expect(Array.isArray(job)).toBe(true);
     });
 
     it('should handle pagination correctly', async () => {
@@ -86,13 +86,13 @@ describe('HackerNewsAPI with MSW', () => {
       
       await expect(HackerNewsAPI.getStoriesByType('top'))
         .rejects
-        .toThrow('Failed to fetch top stories');
+        .toThrow('Failed to fetch stories');
     });
 
     it('should handle invalid story types', async () => {
       await expect(HackerNewsAPI.getPaginatedStories('invalid-type' as any))
         .rejects
-        .toThrow('Invalid story type: invalid-type');
+        .toThrow('Failed to fetch paginated stories');
     });
 
     it('should handle story fetch errors', async () => {

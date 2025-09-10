@@ -11,7 +11,8 @@ export class HackerNewsAPI {
 
   static async getStoriesByType(type: string) {
     try {
-      const response = await api.get(`/${type}stories.json`);
+      const endpoint = type === 'job' ? 'jobstories' : `${type}stories`;
+      const response = await api.get(`/${endpoint}.json`);
       return response.data;
     } catch (error: any) {
       throw new Error(`Failed to fetch stories: ${error.message}`);
@@ -40,20 +41,7 @@ export class HackerNewsAPI {
   static async getPaginatedStories(type = 'top', page = 0, limit = 30) {
     try {
 
-      let storyIds;
-      if (type === 'top') {
-        storyIds = await this.getStoriesByType(type);
-      } else if (type === 'new') {
-        storyIds = await this.getStoriesByType(type);
-      } else if (type === 'ask') {
-        storyIds = await this.getStoriesByType(type);
-      } else if (type === 'show') {
-        storyIds = await this.getStoriesByType(type);
-      } else if (type === 'jobs') {
-        storyIds = await this.getStoriesByType(type);
-      } else {
-        throw new Error(`Invalid story type: ${type}`);
-      }
+      let storyIds = await this.getStoriesByType(type);
       
       const startIndex = page * limit;
       const endIndex = startIndex + limit;

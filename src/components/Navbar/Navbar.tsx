@@ -22,7 +22,7 @@ const Navbar = () => {
     { id: 'new', title: 'Newest Stories' },
     { id: 'ask', title: 'Ask' },
     { id: 'show', title: 'Show' },
-    { id: 'jobs', title: 'Jobs' },
+    { id: 'job', title: 'Jobs' },
   ];
 
   const handleSubmitClick = () => {

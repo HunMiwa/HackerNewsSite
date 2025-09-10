@@ -57,7 +57,6 @@ export const useIntersectionObserver = ({
 
 export const useStoryList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  // Get story type from URL params instead of Redux
   const { type } = useParams();
   const currentType = type || 'top';
   
@@ -80,7 +79,7 @@ export const useStoryList = () => {
   }, [fetchNextPage, isFetchingNextPage, hasNextPage]);
 
   const refresh = useCallback(() => {
-    refetch();
+    refetch({cancelRefetch: false});
   }, [refetch]);
 
   const handleLoginClick = useCallback((message: string) => {

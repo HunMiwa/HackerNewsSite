@@ -5,7 +5,7 @@ import { useStoryList, useIntersectionObserver } from '../hooks/hooks';
 import classes from './StoryList.module.css';
 
 export const StoryList = () => {
-  const { stories, loading, error, hasMore, loadMore, refresh, handleLoginClick } = useStoryList();
+  const { stories, loading, error, hasMore, loadMore, refresh, handleLoginClick, currentType } = useStoryList();
   const loadMoreRef = useRef<any>(null);
 
   const lastStoryElementRef = useIntersectionObserver({
@@ -18,7 +18,7 @@ export const StoryList = () => {
       <div className={classes.storyListError}>
         <div className={classes.errorContent}>
           <h3 id = "error_message">😕 Oops! Something went wrong</h3>
-          <p>{error}</p> {/* This is a bad practice, is it not? */}
+          <p>{error}</p>
           <ButtonSample onClick={refresh}>
             🔄 Try Again
           </ButtonSample>
@@ -47,7 +47,7 @@ export const StoryList = () => {
         </ButtonSample>
       </div>
 
-      <div className={classes.storiesContainer} id = "stories_container">
+      <div className={classes.storiesContainer} id = {`stories_${currentType}`}>
         {stories.map((story, index) => {
           const isLastElement = index === stories.length - 1;
           

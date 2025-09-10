@@ -20,6 +20,6 @@ export const GetStory = (storyId: number) => {
         queryKey: ['story', storyId],
         queryFn: () => HackerNewsAPI.getStory(storyId),
         enabled: !!storyId,
-        staleTime: 10 * 60 * 1000, // 10 minutes
+        staleTime: 10 * 60 * 1000,
     });
 };

@@ -2,7 +2,7 @@ import homePO from '../page-objects/homePO.js'
 import homeTestData from '../page-objects/homeTestData.js'
 import { CustomWorld } from '../support/world.js'
 import { NavbarButton } from '../types.js'
-import { AssertText } from './core.js'
+import { AssertText, AssertVisible } from './core.js'
 
 
 export async function CheckPageTitle(this: CustomWorld) {
@@ -11,7 +11,9 @@ export async function CheckPageTitle(this: CustomWorld) {
 }
 
 export async function InterceptAPICall(this: CustomWorld) {
-  await this.page.route('https://hacker-news.firebaseio.com/v0/topstories.json', (route) => route.abort())
+  await this.page.route('**/v0/jobstories.json', route => {
+    route.abort('timedout');
+  });
 }
 
 export async function CheckErrorMessage(this: CustomWorld) {
@@ -21,18 +23,19 @@ export async function CheckErrorMessage(this: CustomWorld) {
 }
 
 export async function CheckStoriesLoadedAPI(this: CustomWorld, navbarButton: NavbarButton) {
-  switch (navbarButton) {
-    case 'top':
-      await this.page.route('**/v0/topstories.json', async route => {
+  await this.page.route(`**/v0/${navbarButton}stories.json`, async route => {
 
-        const request = route.request();
-        expect(request.url()).toContain('/v0/topstories.json');
-        expect(request.method()).toBe('GET');
-        
-        await route.continue();
-      });
-      break
-    case 'new':
-      break
-  }
+    const request = route.request();
+    expect(request.url()).toContain(`/v0/${navbarButton}stories.json`);
+    expect(request.method()).toBe('GET');
+    
+    await route.continue();
+  });
+
+  const stories = await this.page.locator(homePO.stories_container(navbarButton))
+  await AssertVisible(stories)
+}
+
+export async function WaitNetworkIdle(this: CustomWorld) {
+  await this.page.waitForLoadState('networkidle')
 }

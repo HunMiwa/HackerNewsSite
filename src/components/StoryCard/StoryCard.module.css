@@ -98,7 +98,6 @@
   color: #ff6600;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .storyCard {
     padding: 16px;
